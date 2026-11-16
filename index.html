@@ -1,246 +1,357 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>علامت نسبت‌های مثلثاتی | فاطمه یاسمی</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مثلثات تعاملی | دبیرستان شهید آوینی</title>
+    <style>
+        /* --- تنظیمات کلی و پالت رنگی --- */
+        :root {
+            --primary: #8e44ad;
+            --secondary: #2980b9;
+            --bg-color: #f4f7f6;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            
+            /* رنگ‌های اختصاصی نسبت‌ها */
+            --color-sin: #e74c3c;   /* قرمز */
+            --color-cos: #3498db;   /* آبی */
+            --color-tan: #27ae60;   /* سبز */
+            --color-cot: #f39c12;   /* نارنجی */
+        }
 
-<style>
-body {
-    font-family: Tahoma, sans-serif;
-    background: #f0f5ff;
-    text-align: center;
-    padding: 15px;
-    color: #24344d;
-}
-.container {
-    max-width: 850px;
-    margin: auto;
-    background: white;
-    padding: 22px;
-    border-radius: 18px;
-    box-shadow: 0 4px 15px #ccd5e5;
-}
-h1 { color: #254c91; }
-h2 { color: #176b87; }
-canvas {
-    max-width: 100%;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-}
-input { width: 80%; }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-td, th {
-    border: 1px solid #bbb;
-    padding: 12px;
-}
-th { background: #dceaff; }
-.positive { color: green; font-weight: bold; }
-.negative { color: red; font-weight: bold; }
-.note {
-    background: #eaf5ff;
-    padding: 15px;
-    border-radius: 10px;
-    line-height: 2;
-    margin-top: 15px;
-}
-.author {
-    margin-top: 25px;
-    padding: 15px;
-    background: #e2edff;
-    color: #254c91;
-    border-radius: 10px;
-    font-weight: bold;
-}
-</style>
+        body {
+            font-family: Vazirmatn, Tahoma, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        /* --- هدر (سربرگ) --- */
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #8e44ad, #2980b9);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(142, 68, 173, 0.3);
+        }
+
+        header h1 {
+            margin: 0 0 15px 0;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .teacher-info {
+            background-color: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .teacher-info p { margin: 5px 0; }
+
+        /* --- کارت‌های بخش‌ها --- */
+        .section-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+
+        /* --- دکمه‌های تعاملی --- */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        button {
+            font-family: inherit;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        }
+
+        /* رنگ دکمه‌های ربع‌ها */
+        .btn-q1 { background-color: #2ecc71; color: white; }
+        .btn-q2 { background-color: #3498db; color: white; }
+        .btn-q3 { background-color: #e67e22; color: white; }
+        .btn-q4 { background-color: #9b59b6; color: white; }
+
+        /* رنگ دکمه‌های مرزها */
+        .btn-boundary { background-color: #bdc3c7; color: #2c3e50; }
+        .btn-boundary.active { background-color: #34495e; color: white; transform: scale(1.05); }
+
+        /* --- جعبه نتایج تعاملی --- */
+        .result-box {
+            background-color: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .result-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* --- شبکه نمایش علامت‌ها --- */
+        .signs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sign-item {
+            padding: 10px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .sign-item span { font-size: 1.5em; }
+        
+        /* رنگ‌آمیزی نسبت‌ها در جعبه نتیجه */
+        .item-sin { border-top: 4px solid var(--color-sin); }
+        .item-cos { border-top: 4px solid var(--color-cos); }
+        .item-tan { border-top: 4px solid var(--color-tan); }
+        .item-cot { border-top: 4px solid var(--color-cot); }
+
+        .positive { color: #27ae60; }
+        .negative { color: #e74c3c; }
+
+        /* --- جدول مقادیر --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        /* رنگ‌دهی به سرستون‌های جدول */
+        th.th-sin { color: var(--color-sin); }
+        th.th-cos { color: var(--color-cos); }
+        th.th-tan { color: var(--color-tan); }
+        th.th-cot { color: var(--color-cot); }
+
+        .val-display { font-size: 1.3em; font-weight: bold; }
+        .undefined { color: #e74c3c; font-size: 0.9em; background: #fadbd8; padding: 2px 8px; border-radius: 5px;}
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
-<div class="container">
 
-<h1>آموزش علامت نسبت‌های مثلثاتی</h1>
-<h2>در دایره مثلثاتی</h2>
+    <div class="container">
+        <header>
+            <h1>مبحث مثلثات</h1>
+            <div class="teacher-info">
+                <p>تهیه‌کننده: فاطمه یاسمی</p>
+                <p>دبیرستان: شهید آوینی</p>
+            </div>
+        </header>
 
-<p>
-در دایره مثلثاتی، علامت نسبت‌های مثلثاتی
-به ناحیه‌ای بستگی دارد که ضلع نهایی زاویه
-در آن قرار گرفته است.
-</p>
+        <!-- بخش اول: تعامل با ربع‌ها -->
+        <div class="section-card">
+            <h2>۱. علامت نسبت‌های مثلثاتی در ربع‌ها</h2>
+            <p>روی هر ربع کلیک کنید تا علامت سینوس، کسینوس، تانژانت و کتانژانت را ببینید:</p>
+            
+            <div class="btn-group">
+                <button class="btn-q1" onclick="showQuadrant(1)">ربع اول</button>
+                <button class="btn-q2" onclick="showQuadrant(2)">ربع دوم</button>
+                <button class="btn-q3" onclick="showQuadrant(3)">ربع سوم</button>
+                <button class="btn-q4" onclick="showQuadrant(4)">ربع چهارم</button>
+            </div>
 
-<canvas id="circle" width="600" height="480"></canvas>
+            <div class="result-box" id="quadrant-result">
+                <div class="result-title">برای دیدن نتیجه، روی یکی از ربع‌ها کلیک کنید</div>
+            </div>
+        </div>
 
-<h2>زاویه را تغییر بده</h2>
-<input type="range" id="angle"
-min="0" max="360" value="45">
+        <!-- بخش دوم: تعامل با زوایای مرزی -->
+        <div class="section-card">
+            <h2>۲. مقادیر نسبت‌ها در مرزها (زوایای اصلی)</h2>
+            <p>زاویه مورد نظر را انتخاب کنید:</p>
+            
+            <div class="btn-group" id="boundary-buttons">
+                <button class="btn-boundary" onclick="showBoundary(0)">۰ درجه</button>
+                <button class="btn-boundary" onclick="showBoundary(90)">۹۰ درجه</button>
+                <button class="btn-boundary" onclick="showBoundary(180)">۱۸۰ درجه</button>
+                <button class="btn-boundary" onclick="showBoundary(270)">۲۷۰ درجه</button>
+                <button class="btn-boundary" onclick="showBoundary(360)">۳۶۰ درجه</button>
+            </div>
 
-<h3 id="degree">زاویه: ۴۵ درجه</h3>
-<h3 id="quadrant">ناحیه اول</h3>
+            <div class="result-box" id="boundary-result">
+                <div class="result-title">یک زاویه را انتخاب کنید</div>
+            </div>
+        </div>
 
-<div id="result"></div>
+        <footer>
+            طراحی شده برای یادگیری بهتر ریاضی ۱ | دبیرستان شهید آوینی
+        </footer>
+    </div>
 
-<h2>جدول علامت نسبت‌ها</h2>
+    <!-- کدهای جاوا اسکریپت برای تعامل -->
+    <script>
+        // تابع نمایش علامت ربع‌ها
+        function showQuadrant(q) {
+            const resultBox = document.getElementById('quadrant-result');
+            let title = "";
+            let sinSign = "", cosSign = "", tanSign = "", cotSign = "";
 
-<table>
-<tr>
-<th>ناحیه</th>
-<th>sin</th>
-<th>cos</th>
-<th>tan</th>
-</tr>
-<tr><td>اول</td><td class="positive">+</td>
-<td class="positive">+</td><td class="positive">+</td></tr>
-<tr><td>دوم</td><td class="positive">+</td>
-<td class="negative">−</td><td class="negative">−</td></tr>
-<tr><td>سوم</td><td class="negative">−</td>
-<td class="negative">−</td><td class="positive">+</td></tr>
-<tr><td>چهارم</td><td class="negative">−</td>
-<td class="positive">+</td><td class="negative">−</td></tr>
-</table>
+            if (q === 1) {
+                title = "ربع اول (همه نسبت‌ها مثبت هستند)";
+                sinSign = "<span class='positive'>+</span>";
+                cosSign = "<span class='positive'>+</span>";
+                tanSign = "<span class='positive'>+</span>";
+                cotSign = "<span class='positive'>+</span>";
+                resultBox.style.backgroundColor = "#e8f8f5";
+            } else if (q === 2) {
+                title = "ربع دوم (فقط سینوس مثبت است)";
+                sinSign = "<span class='positive'>+</span>";
+                cosSign = "<span class='negative'>−</span>";
+                tanSign = "<span class='negative'>−</span>";
+                cotSign = "<span class='negative'>−</span>";
+                resultBox.style.backgroundColor = "#eaf2f8";
+            } else if (q === 3) {
+                title = "ربع سوم (فقط تانژانت و کتانژانت مثبت هستند)";
+                sinSign = "<span class='negative'>−</span>";
+                cosSign = "<span class='negative'>−</span>";
+                tanSign = "<span class='positive'>+</span>";
+                cotSign = "<span class='positive'>+</span>";
+                resultBox.style.backgroundColor = "#fdf2e9";
+            } else if (q === 4) {
+                title = "ربع چهارم (فقط کسینوس مثبت است)";
+                sinSign = "<span class='negative'>−</span>";
+                cosSign = "<span class='positive'>+</span>";
+                tanSign = "<span class='negative'>−</span>";
+                cotSign = "<span class='negative'>−</span>";
+                resultBox.style.backgroundColor = "#f4ecf7";
+            }
 
-<div class="note">
-<b>نکته طلایی برای یادگیری:</b>
-<br>
-ناحیه اول: همه مثبت هستند.
-<br>
-ناحیه دوم: فقط سینوس مثبت است.
-<br>
-ناحیه سوم: فقط تانژانت مثبت است.
-<br>
-ناحیه چهارم: فقط کسینوس مثبت است.
-</div>
+            resultBox.innerHTML = `
+                <div class="result-title">${title}</div>
+                <div class="signs-grid">
+                    <div class="sign-item item-sin">sin<br>${sinSign}</div>
+                    <div class="sign-item item-cos">cos<br>${cosSign}</div>
+                    <div class="sign-item item-tan">tan<br>${tanSign}</div>
+                    <div class="sign-item item-cot">cot<br>${cotSign}</div>
+                </div>
+            `;
+        }
 
-<h2>چرا علامت‌ها تغییر می‌کنند؟</h2>
+        // تابع نمایش مقادیر مرزی
+        function showBoundary(angle) {
+            // فعال کردن دکمه کلیک شده
+            const buttons = document.querySelectorAll('.btn-boundary');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-<p><b>cos θ = x</b></p>
-<p><b>sin θ = y</b></p>
-<p><b>tan θ = y / x</b></p>
+            const resultBox = document.getElementById('boundary-result');
+            let sinVal, cosVal, tanVal, cotVal, displayAngle = angle;
 
-<p>
-علامت کسینوس به مختصات افقی و علامت سینوس
-به مختصات عمودی وابسته است.
-</p>
+            if (angle === 0 || angle === 360) {
+                sinVal = "0"; cosVal = "1"; tanVal = "0"; cotVal = "<span class='undefined'>تعریف نشده</span>";
+            } else if (angle === 90) {
+                sinVal = "1"; cosVal = "0"; tanVal = "<span class='undefined'>تعریف نشده</span>"; cotVal = "0";
+            } else if (angle === 180) {
+                sinVal = "0"; cosVal = "-1"; tanVal = "0"; cotVal = "<span class='undefined'>تعریف نشده</span>";
+            } else if (angle === 270) {
+                sinVal = "-1"; cosVal = "0"; tanVal = "<span class='undefined'>تعریف نشده</span>"; cotVal = "0";
+            }
 
-<div class="author">
-تهیه‌کننده و طراح محتوای آموزشی: فاطمه یاسمی
-</div>
+            // تبدیل اعداد به فارسی برای زیبایی
+            const faAngle = displayAngle.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 
-</div>
-
-<script>
-const canvas = document.getElementById("circle");
-const ctx = canvas.getContext("2d");
-const slider = document.getElementById("angle");
-
-function draw() {
-let deg = Number(slider.value);
-let rad = deg * Math.PI / 180;
-let cx = 300, cy = 235, r = 170;
-
-ctx.clearRect(0,0,600,480);
-
-// محورها
-ctx.beginPath();
-ctx.strokeStyle = "#555";
-ctx.lineWidth = 2;
-ctx.moveTo(40,cy);
-ctx.lineTo(560,cy);
-ctx.moveTo(cx,35);
-ctx.lineTo(cx,435);
-ctx.stroke();
-
-ctx.fillStyle = "#222";
-ctx.font = "18px Tahoma";
-ctx.fillText("x",550,cy-12);
-ctx.fillText("y",cx+12,45);
-
-// دایره
-ctx.beginPath();
-ctx.arc(cx,cy,r,0,2*Math.PI);
-ctx.strokeStyle = "#2866b2";
-ctx.lineWidth = 3;
-ctx.stroke();
-
-// نام نواحی
-ctx.font = "20px Tahoma";
-ctx.fillStyle = "#888";
-ctx.fillText("اول",420,150);
-ctx.fillText("دوم",150,150);
-ctx.fillText("سوم",150,330);
-ctx.fillText("چهارم",420,330);
-
-// نقطه متحرک
-let x = cx + r*Math.cos(rad);
-let y = cy - r*Math.sin(rad);
-
-// شعاع
-ctx.beginPath();
-ctx.moveTo(cx,cy);
-ctx.lineTo(x,y);
-ctx.strokeStyle = "#e67e22";
-ctx.lineWidth = 3;
-ctx.stroke();
-
-// تصویر مختصات
-ctx.beginPath();
-ctx.moveTo(x,y);
-ctx.lineTo(x,cy);
-ctx.lineTo(cx,cy);
-ctx.strokeStyle = "#16a085";
-ctx.setLineDash([5,5]);
-ctx.stroke();
-ctx.setLineDash([]);
-
-// نقطه
-ctx.beginPath();
-ctx.arc(x,y,7,0,2*Math.PI);
-ctx.fillStyle = "#e74c3c";
-ctx.fill();
-
-ctx.fillStyle = "#333";
-ctx.font = "16px Tahoma";
-ctx.fillText(deg+"°",cx+35,cy-15);
-
-let q;
-if(deg===0 || deg===360) q="روی محور x مثبت";
-else if(deg===90) q="روی محور y مثبت";
-else if(deg===180) q="روی محور x منفی";
-else if(deg===270) q="روی محور y منفی";
-else if(deg<90) q="ناحیه اول";
-else if(deg<180) q="ناحیه دوم";
-else if(deg<270) q="ناحیه سوم";
-else q="ناحیه چهارم";
-
-document.getElementById("degree").innerText =
-"زاویه: "+deg+" درجه";
-
-getElementById("quadrant").innerText=q;
-
-let sin = Math.sin(rad);
-let cos = Math.cos(rad);
-let tan = Math.abs(cos)<0.000001 ?
-"تعریف نشده" : (sin/cos).toFixed(3);
-
-let sign = v =>
-Math.abs(v)<0.000001 ? "صفر" :
-v>0 ? "مثبت (+)" : "منفی (−)";
-
-document.getElementById("result").innerHTML =
-"<div class='note'>"+
-"sin θ = "+sin.toFixed(3)+" | "+sign(sin)+"<br>"+
-"cos θ = "+cos.toFixed(3)+" | "+sign(cos)+"<br>"+
-"tan θ = "+tan+"<br>"+
-"</div>";
-}
-
-slider.addEventListener("input",draw);
-draw();
-</script>
+            resultBox.innerHTML = `
+                <div class="result-title">مقادیر در زاویه ${faAngle} درجه</div>
+                <table>
+                    <tr>
+                        <th class="th-sin">sin</th>
+                        <th class="th-cos">cos</th>
+                        <th class="th-tan">tan</th>
+                        <th class="th-cot">cot</th>
+                    </tr>
+                    <tr>
+                        <td class="val-display" style="color: var(--color-sin);">${sinVal}</td>
+                        <td class="val-display" style="color: var(--color-cos);">${cosVal}</td>
+                        <td class="val-display" style="color: var(--color-tan);">${tanVal}</td>
+                        <td class="val-display" style="color: var(--color-cot);">${cotVal}</td>
+                    </tr>
+                </table>
+            `;
+        }
+    </script>
 
 </body>
 </html>
