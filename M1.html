@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>علامت نسبت‌های مثلثاتی | فاطمه یاسمی</title>
+
+<style>
+body {
+    font-family: Tahoma, sans-serif;
+    background: #f0f5ff;
+    text-align: center;
+    padding: 15px;
+    color: #24344d;
+}
+.container {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px #ccd5e5;
+}
+h1 { color: #254c91; }
+h2 { color: #176b87; }
+canvas {
+    max-width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+input { width: 80%; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+td, th {
+    border: 1px solid #bbb;
+    padding: 12px;
+}
+th { background: #dceaff; }
+.positive { color: green; font-weight: bold; }
+.negative { color: red; font-weight: bold; }
+.note {
+    background: #eaf5ff;
+    padding: 15px;
+    border-radius: 10px;
+    line-height: 2;
+    margin-top: 15px;
+}
+.author {
+    margin-top: 25px;
+    padding: 15px;
+    background: #e2edff;
+    color: #254c91;
+    border-radius: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>آموزش علامت نسبت‌های مثلثاتی</h1>
+<h2>در دایره مثلثاتی</h2>
+
+<p>
+در دایره مثلثاتی، علامت نسبت‌های مثلثاتی
+به ناحیه‌ای بستگی دارد که ضلع نهایی زاویه
+در آن قرار گرفته است.
+</p>
+
+<canvas id="circle" width="600" height="480"></canvas>
+
+<h2>زاویه را تغییر بده</h2>
+<input type="range" id="angle"
+min="0" max="360" value="45">
+
+<h3 id="degree">زاویه: ۴۵ درجه</h3>
+<h3 id="quadrant">ناحیه اول</h3>
+
+<div id="result"></div>
+
+<h2>جدول علامت نسبت‌ها</h2>
+
+<table>
+<tr>
+<th>ناحیه</th>
+<th>sin</th>
+<th>cos</th>
+<th>tan</th>
+</tr>
+<tr><td>اول</td><td class="positive">+</td>
+<td class="positive">+</td><td class="positive">+</td></tr>
+<tr><td>دوم</td><td class="positive">+</td>
+<td class="negative">−</td><td class="negative">−</td></tr>
+<tr><td>سوم</td><td class="negative">−</td>
+<td class="negative">−</td><td class="positive">+</td></tr>
+<tr><td>چهارم</td><td class="negative">−</td>
+<td class="positive">+</td><td class="negative">−</td></tr>
+</table>
+
+<div class="note">
+<b>نکته طلایی برای یادگیری:</b>
+<br>
+ناحیه اول: همه مثبت هستند.
+<br>
+ناحیه دوم: فقط سینوس مثبت است.
+<br>
+ناحیه سوم: فقط تانژانت مثبت است.
+<br>
+ناحیه چهارم: فقط کسینوس مثبت است.
+</div>
+
+<h2>چرا علامت‌ها تغییر می‌کنند؟</h2>
+
+<p><b>cos θ = x</b></p>
+<p><b>sin θ = y</b></p>
+<p><b>tan θ = y / x</b></p>
+
+<p>
+علامت کسینوس به مختصات افقی و علامت سینوس
+به مختصات عمودی وابسته است.
+</p>
+
+<div class="author">
+تهیه‌کننده و طراح محتوای آموزشی: فاطمه یاسمی
+</div>
+
+</div>
+
+<script>
+const canvas = document.getElementById("circle");
+const ctx = canvas.getContext("2d");
+const slider = document.getElementById("angle");
+
+function draw() {
+let deg = Number(slider.value);
+let rad = deg * Math.PI / 180;
+let cx = 300, cy = 235, r = 170;
+
+ctx.clearRect(0,0,600,480);
+
+// محورها
+ctx.beginPath();
+ctx.strokeStyle = "#555";
+ctx.lineWidth = 2;
+ctx.moveTo(40,cy);
+ctx.lineTo(560,cy);
+ctx.moveTo(cx,35);
+ctx.lineTo(cx,435);
+ctx.stroke();
+
+ctx.fillStyle = "#222";
+ctx.font = "18px Tahoma";
+ctx.fillText("x",550,cy-12);
+ctx.fillText("y",cx+12,45);
+
+// دایره
+ctx.beginPath();
+ctx.arc(cx,cy,r,0,2*Math.PI);
+ctx.strokeStyle = "#2866b2";
+ctx.lineWidth = 3;
+ctx.stroke();
+
+// نام نواحی
+ctx.font = "20px Tahoma";
+ctx.fillStyle = "#888";
+ctx.fillText("اول",420,150);
+ctx.fillText("دوم",150,150);
+ctx.fillText("سوم",150,330);
+ctx.fillText("چهارم",420,330);
+
+// نقطه متحرک
+let x = cx + r*Math.cos(rad);
+let y = cy - r*Math.sin(rad);
+
+// شعاع
+ctx.beginPath();
+ctx.moveTo(cx,cy);
+ctx.lineTo(x,y);
+ctx.strokeStyle = "#e67e22";
+ctx.lineWidth = 3;
+ctx.stroke();
+
+// تصویر مختصات
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.lineTo(x,cy);
+ctx.lineTo(cx,cy);
+ctx.strokeStyle = "#16a085";
+ctx.setLineDash([5,5]);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// نقطه
+ctx.beginPath();
+ctx.arc(x,y,7,0,2*Math.PI);
+ctx.fillStyle = "#e74c3c";
+ctx.fill();
+
+ctx.fillStyle = "#333";
+ctx.font = "16px Tahoma";
+ctx.fillText(deg+"°",cx+35,cy-15);
+
+let q;
+if(deg===0 || deg===360) q="روی محور x مثبت";
+else if(deg===90) q="روی محور y مثبت";
+else if(deg===180) q="روی محور x منفی";
+else if(deg===270) q="روی محور y منفی";
+else if(deg<90) q="ناحیه اول";
+else if(deg<180) q="ناحیه دوم";
+else if(deg<270) q="ناحیه سوم";
+else q="ناحیه چهارم";
+
+document.getElementById("degree").innerText =
+"زاویه: "+deg+" درجه";
+
+getElementById("quadrant").innerText=q;
+
+let sin = Math.sin(rad);
+let cos = Math.cos(rad);
+let tan = Math.abs(cos)<0.000001 ?
+"تعریف نشده" : (sin/cos).toFixed(3);
+
+let sign = v =>
+Math.abs(v)<0.000001 ? "صفر" :
+v>0 ? "مثبت (+)" : "منفی (−)";
+
+document.getElementById("result").innerHTML =
+"<div class='note'>"+
+"sin θ = "+sin.toFixed(3)+" | "+sign(sin)+"<br>"+
+"cos θ = "+cos.toFixed(3)+" | "+sign(cos)+"<br>"+
+"tan θ = "+tan+"<br>"+
+"</div>";
+}
+
+slider.addEventListener("input",draw);
+draw();
+</script>
+
+</body>
+</html>
